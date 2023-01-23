@@ -1,10 +1,14 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
+import Header from "./components/Header";
+import Main from "./components/Main";
+import Footer from "./components/Footer";
 
 function App() {
   const memberRef = useRef();
   const [members, setMembers] = useState([]);
   const [isMemberAdded, setIsMemberAdded] = useState(false);
+  const [isMaxMembers, setIsMaxMembers] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -29,50 +33,22 @@ function App() {
       }
     };
     getMembers();
+
+    if (members.length >= 45) {
+      setIsMaxMembers(true);
+    }
   }, [isMemberAdded]);
   return (
     <div className="h-screen w-screen flex place-content-center">
       <div className="h-full w-full md:w-5/6 bg-red-500 flex flex-col justify-between">
-        <header className="h-16 bg-blue-500 flex justify-around">
-          <div className="h-16 w-16 bg-yellow-500">Logo</div>
-          <div className="h-16 w-16 bg-yellow-500">Title</div>
-        </header>
-        <main className="h-[calc(100%-128px)] bg-green-500 flex flex-col justify-around items-center">
-          <form className="h-16 w-96 bg-yellow-500 flex justify-around items-center">
-            <input
-              className="h-8 w-64 bg-white"
-              type="text"
-              placeholder="Ajouter un membre"
-              ref={memberRef}
-            />
-            <button
-              type="submit"
-              className="h-8 w-16 bg-white"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit();
-              }}
-            >
-              Ajouter
-            </button>
-          </form>
-          <section className="w-full bg-yellow-500 flex gap-4 md:justify-around overflow-x-auto">
-            {/* each 10 members a new unordered list  */}
-            {members.map((a, index) => {
-              if (index % 10 === 0) {
-                return (
-                  <ul className="bg-white flex flex-col">
-                    {members.slice(index, index + 10).map((member) => {
-                      return <li>{member.name}</li>;
-                    })}
-                  </ul>
-                );
-              }
-              return null;
-            })}
-          </section>
-        </main>
-        <footer className="h-16 bg-yellow-500">Footer</footer>
+        <Header />
+        <Main
+          members={members}
+          isMaxMembers={isMaxMembers}
+          memberRef={memberRef}
+          handleSubmit={handleSubmit}
+        />
+        <Footer />
       </div>
     </div>
   );
