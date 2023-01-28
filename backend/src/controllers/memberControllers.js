@@ -33,8 +33,8 @@ const read = async (req, res) => {
       },
     },
   });
-  // member.tags = member.member_tag.map((memberTag) => memberTag.tag.name);
-  // delete member.member_tag;
+  member.tags = member.member_tag.map((memberTag) => memberTag.tag.name);
+  delete member.member_tag;
   res.json(member);
 };
 
