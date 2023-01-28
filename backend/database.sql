@@ -1,7 +1,7 @@
-CREATE TABLE item (
-  id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  title varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- CREATE TABLE item (
+--   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--   title varchar(255) NOT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO item (title) VALUES ('Stuff'), ('Doodads');
 
@@ -37,11 +37,11 @@ INSERT INTO item (title) VALUES ('Stuff'), ('Doodads');
 -- Alastor, 40 ans, (savant, intelligent)
 -- Chrysippus, 52 ans, (conquérant, courageux)
 
-CREATE TABLE member (
-  id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  age int(11) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- CREATE TABLE member (
+--   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--   name varchar(255) NOT NULL,
+--   age int(11) UNSIGNED NOT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO member (name, age) VALUES 
   ('Ariston', 35),
@@ -76,10 +76,10 @@ INSERT INTO member (name, age) VALUES
   ('Alastor', 40),
   ('Chrysippus', 52);
 
-CREATE TABLE tag (
-  id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- CREATE TABLE tag (
+--   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--   name varchar(255) NOT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO tag (name) VALUES 
   ('conquérant'),
@@ -93,12 +93,13 @@ INSERT INTO tag (name) VALUES
   ('savant'),
   ('intelligent');
 
-CREATE TABLE member_tag (
-  member_id int(11) UNSIGNED NOT NULL,
-  tag_id int(11) UNSIGNED NOT NULL,
-  CONSTRAINT member_tag_member_id_fk FOREIGN KEY (member_id) REFERENCES member (id),
-  CONSTRAINT member_tag_tag_id_fk FOREIGN KEY (tag_id) REFERENCES tag (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- CREATE TABLE member_tag (
+--   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+--   member_id int(11) UNSIGNED NOT NULL,
+--   tag_id int(11) UNSIGNED NOT NULL,
+--   CONSTRAINT member_tag_member_id_fk FOREIGN KEY (member_id) REFERENCES member (id),
+--   CONSTRAINT member_tag_tag_id_fk FOREIGN KEY (tag_id) REFERENCES tag (id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO member_tag (member_id, tag_id) VALUES 
   (1, 1),
