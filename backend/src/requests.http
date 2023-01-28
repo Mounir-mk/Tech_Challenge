@@ -1,1 +1,14 @@
+GET http://localhost:5000/members
+
+###
 GET http://localhost:5000/members/1
+
+###
+POST http://localhost:5000/members
+Content-Type: application/json
+
+{
+    "name": "Mounir",
+    "age": 30,
+    "tags": ["python", "javascript"],
+}

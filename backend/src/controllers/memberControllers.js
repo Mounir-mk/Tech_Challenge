@@ -28,7 +28,7 @@ const browse = (req, res) => {
 
 const read = (req, res) => {
   models.member
-    .find(req.params.id)
+    .findMemberAndHisTags(req.params.id)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(404);
@@ -36,6 +36,7 @@ const read = (req, res) => {
         // gather all the tags for the member in a single array of tags
         const newRow = rows[0];
         newRow.tags = rows.map((row) => row.tag_name);
+        delete newRow.tag_name;
         res.send(newRow);
       }
     })
@@ -67,20 +68,41 @@ const edit = (req, res) => {
     });
 };
 
-const add = (req, res) => {
-  const member = req.body;
+const add = async (req, res) => {
+  // receiving member informations and its tags in the body of the request
+  //   {
+  //     "name": "Mounir",
+  //     "age": 30,
+  //     "tags": ["python", "javascript"],
+  // }
+  // insert the member and its tags in the database
+  // send back the id of the new member
+  const { name, age, tags } = req.body;
 
   // TODO validations (length, format...)
 
-  models.member
-    .insert(member)
-    .then(([result]) => {
-      res.location(`/members/${result.insertId}`).sendStatus(201);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  try {
+    const [result] = await models.member.insert({ name, age });
+    const memberId = result.insertId;
+
+    const tagIds = await Promise.all(
+      tags.map(async (tag) => {
+        const [resultTag] = await models.tag.insert({ name: tag });
+        return resultTag.insertId;
+      })
+    );
+
+    await Promise.all(
+      tagIds.map(async (tagId) => {
+        await models.memberTag.insert({ member_id: memberId, tag_id: tagId });
+      })
+    );
+
+    res.send({ id: memberId });
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };
 
 const destroy = (req, res) => {

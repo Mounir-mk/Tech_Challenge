@@ -1,10 +1,21 @@
 import { useState } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import AddModal from "./MainComponents/AddModal";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
 
 function Main({ members }) {
+  const handleDeleteMember = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/members/${id}`
+      );
+      console.warn(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <main className="h-[calc(100%-128px)] w-full bg-white flex flex-col justify-around items-center">
@@ -36,7 +47,10 @@ function Main({ members }) {
                   <button type="button">
                     <img src={edit} alt="edit" className="h-6 w-6" />
                   </button>
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteMember(member.id)}
+                  >
                     <img src={trash} alt="trash" className="h-6 w-6" />
                   </button>
                 </div>

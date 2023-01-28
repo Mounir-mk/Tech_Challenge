@@ -5,36 +5,37 @@ CREATE TABLE item (
 
 INSERT INTO item (title) VALUES ('Stuff'), ('Doodads');
 
--- Alexandre (30 ans, conquérant, puissant)
--- Aristote (50 ans, savant, philosophe)
--- Démétrios (40 ans, vaillant, stratège)
--- Diogène (70 ans, intrépide, philosophe)
--- Euclide (60 ans, savant, beau)
--- Héraclite (50 ans, philosophe, puissant)
--- Hippocrate (80 ans, savant, vaillant)
--- Platon (70 ans, philosophe, beau)
--- Pythagore (60 ans, savant, conquérant)
--- Socrate (70 ans, philosophe, courageux)
--- Thalès (60 ans, savant, beau)
--- Antigone (25 ans, tragique, courageuse)
--- Cassandre (30 ans, tragique, puissante)
--- Clytemnestre (50 ans, tragique, puissante)
--- Electre (30 ans, tragique, courageuse)
--- Hélène (40 ans, tragique, belle)
--- Iphigénie (20 ans, tragique, courageuse)
--- Médée (40 ans, tragique, puissante)
--- Némésis (40 ans, tragique, puissante)
--- Oreste (30 ans, tragique, courageux)
--- Pénélope (40 ans, tragique, belle)
--- Phèdre (30 ans, tragique, belle)
--- Sémélé (20 ans, tragique, belle)
--- Télémaque (20 ans, tragique, courageux)
--- Agamemnon (50 ans, tragique, puissant)
--- Hector (40 ans, tragique, vaillant)
--- Jason (40 ans, tragique, conquérant)
--- Odysseus (50 ans, tragique, stratège)
--- Theseus (40 ans, tragique, vaillant)
--- Perseus (30 ans, tragique, vaillant)
+-- Ariston, 35 ans, (conquérant, courageux)
+-- Callias, 42 ans, (puissant, vaillant)
+-- Demetrius, 29 ans, (stratège, beau)
+-- Eudorus, 31 ans, (tragique, philosophe)
+-- Gorgias, 46 ans, (savant, intelligent)
+-- Helios, 25 ans, (conquérant, courageux)
+-- Iphicrates, 40 ans, (puissant, vaillant)
+-- Leonidas, 50 ans, (stratège, beau)
+-- Menelaus, 48 ans, (tragique, philosophe)
+-- Nestor, 60 ans, (savant, intelligent)
+-- Odysseus, 39 ans, (conquérant, courageux)
+-- Polydeuces, 32 ans, (puissant, vaillant)
+-- Theseus, 37 ans, (stratège, beau)
+-- Adrastus, 44 ans, (tragique, philosophe)
+-- Bellerophon, 30 ans, (savant, intelligent)
+-- Castor, 28 ans, (conquérant, courageux)
+-- Diomedes, 35 ans, (puissant, vaillant)
+-- Empedocles, 50 ans, (stratège, beau)
+-- Ganymede, 20 ans, (tragique, philosophe)
+-- Heracles, 45 ans, (savant, intelligent)
+-- Iolaus, 38 ans, (conquérant, courageux)
+-- Leucippus, 43 ans, (puissant, vaillant)
+-- Meleager, 36 ans, (stratège, beau)
+-- Neoptolemus, 24 ans, (tragique, philosophe)
+-- Orpheus, 47 ans, (savant, intelligent)
+-- Perseus, 31 ans, (conquérant, courageux)
+-- Tantalus, 55 ans, (puissant, vaillant)
+-- Ulysses, 41 ans, (stratège, beau)
+-- Zenon, 26 ans, (tragique, philosophe)
+-- Alastor, 40 ans, (savant, intelligent)
+-- Chrysippus, 52 ans, (conquérant, courageux)
 
 CREATE TABLE member (
   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -43,36 +44,37 @@ CREATE TABLE member (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO member (name, age) VALUES 
-  ('Alexandre', 30),
-('Aristote', 50),
-('Démétrios', 40),
-('Diogène', 70),
-('Euclide', 60),
-('Héraclite', 50),
-('Hippocrate', 80),
-('Platon', 70),
-('Pythagore', 60),
-('Socrate', 70),
-('Thalès', 60),
-('Antigone', 25),
-('Cassandre', 30),
-('Clytemnestre', 50),
-('Electre', 30),
-('Hélène', 40),
-('Iphigénie', 20),
-('Médée', 40),
-('Némésis', 40),
-('Oreste', 30),
-('Pénélope', 40),
-('Phèdre', 30),
-('Sémélé', 20),
-('Télémaque', 20),
-('Agamemnon', 50),
-('Hector', 40),
-('Jason', 40),
-('Odysseus', 50),
-('Theseus', 40),
-('Perseus', 30);
+  ('Ariston', 35),
+  ('Callias', 42),
+  ('Demetrius', 29),
+  ('Eudorus', 31),
+  ('Gorgias', 46),
+  ('Helios', 25),
+  ('Iphicrates', 40),
+  ('Leonidas', 50),
+  ('Menelaus', 48),
+  ('Nestor', 60),
+  ('Odysseus', 39),
+  ('Polydeuces', 32),
+  ('Theseus', 37),
+  ('Adrastus', 44),
+  ('Bellerophon', 30),
+  ('Castor', 28),
+  ('Diomedes', 35),
+  ('Empedocles', 50),
+  ('Ganymede', 20),
+  ('Heracles', 45),
+  ('Iolaus', 38),
+  ('Leucippus', 43),
+  ('Meleager', 36),
+  ('Neoptolemus', 24),
+  ('Orpheus', 47),
+  ('Perseus', 31),
+  ('Tantalus', 55),
+  ('Ulysses', 41),
+  ('Zenon', 26),
+  ('Alastor', 40),
+  ('Chrysippus', 52);
 
 CREATE TABLE tag (
   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -80,19 +82,16 @@ CREATE TABLE tag (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO tag (name) VALUES 
- ('conquérant'),
-('courageux'),
-('courageuse'),
-('puissant'),
-('puissante'),
-('stratège'),
-('vaillant'),
-('vaillante'),
-('beau'),
-('belle'),
-('savant'),
-('philosophe'),
-('tragique');
+  ('conquérant'),
+  ('courageux'),
+  ('puissant'),
+  ('vaillant'),
+  ('stratège'),
+  ('beau'),
+  ('tragique'),
+  ('philosophe'),
+  ('savant'),
+  ('intelligent');
 
 CREATE TABLE member_tag (
   member_id int(11) UNSIGNED NOT NULL,
@@ -102,62 +101,65 @@ CREATE TABLE member_tag (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO member_tag (member_id, tag_id) VALUES 
-(1, 1),
-(1, 3),
-(1, 4),
-(2, 11),
-(2, 12),
-(3, 4),
-(3, 6),
-(4, 3),
-(4, 12),
-(5, 11),
-(5, 9),
-(6, 12),
-(6, 4),
-(7, 11),
-(7, 6),
-(8, 12),
-(8, 3),
-(9, 11),
-(9, 1),
-(10, 12),
-(10, 3),
-(11, 11),
-(11, 9),
-(12, 13),
-(12, 3),
-(13, 13),
-(13, 4),
-(14, 13),
-(14, 3),
-(15, 13),
-(15, 3),
-(16, 13),
-(16, 2),
-(17, 13),
-(17, 3),
-(18, 13),
-(18, 4),
-(19, 13),
-(19, 2),
-(20, 13),
-(20, 9),
-(21, 13),
-(21, 3),
-(22, 13),
-(22, 2),
-(23, 13),
-(23, 1),
-(24, 13),
-(24, 4),
-(25, 13),
-(25, 6),
-(26, 13),
-(26, 4),
-(27, 13),
-(27, 1),
-(28, 13),
-(28, 6),
-(29, 13),
-(29, 4);
+  (1, 1),
+  (1, 2),
+  (2, 3),
+  (2, 4),
+  (3, 5),
+  (3, 6),
+  (4, 7),
+  (4, 8),
+  (5, 9),
+  (5, 10),
+  (6, 1),
+  (6, 2),
+  (7, 3),
+  (7, 4),
+  (8, 5),
+  (8, 6),
+  (9, 7),
+  (9, 8),
+  (10, 9),
+  (10, 10),
+  (11, 1),
+  (11, 2),
+  (12, 3),
+  (12, 4),
+  (13, 5),
+  (13, 6),
+  (14, 7),
+  (14, 8),
+  (15, 9),
+  (15, 10),
+  (16, 1),
+  (16, 2),
+  (17, 3),
+  (17, 4),
+  (18, 5),
+  (18, 6),
+  (19, 7),
+  (19, 8),
+  (20, 9),
+  (20, 10),
+  (21, 1),
+  (21, 2),
+  (22, 3),
+  (22, 4),
+  (23, 5),
+  (23, 6),
+  (24, 7),
+  (24, 8),
+  (25, 9),
+  (25, 10),
+  (26, 1),
+  (26, 2),
+  (27, 3),
+  (27, 4),
+  (28, 5),
+  (28, 6),
+  (29, 7),
+  (29, 8),
+  (30, 9),
+  (30, 10),
+  (31, 1),
+  (31, 2);
