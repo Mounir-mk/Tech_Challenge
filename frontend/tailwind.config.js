@@ -15,7 +15,11 @@ module.exports = {
         "9/10": "90%",
         "10/10": "100%",
       },
+      flex: {
+        "responsive-card": "0 1 16rem",
+      },
+
+      plugins: [],
     },
-    plugins: [],
   },
 };

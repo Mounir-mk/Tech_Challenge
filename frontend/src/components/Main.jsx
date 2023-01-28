@@ -1,46 +1,49 @@
-import PropTypes, { oneOfType } from "prop-types";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import AddModal from "./MainComponents/AddModal";
+import edit from "../assets/edit.svg";
+import trash from "../assets/trash.svg";
 
-function Main({ members, isMaxMembers, memberRef, handleSubmit }) {
+function Main({ members }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <main className="h-[calc(100%-128px)] bg-green-500 flex flex-col justify-around items-center">
-      <form className="h-16 w-96 flex justify-around items-center">
-        <input
-          className={`h-8 w-64 bg-white ${
-            isMaxMembers ? "border-red-500 border-2 animate-pulse" : ""
-          } `}
-          type="text"
-          placeholder="Ajouter un membre"
-          ref={memberRef}
-          disabled={isMaxMembers}
-        />
-        <button
-          type="submit"
-          className={`h-8 w-16 bg-white ${
-            isMaxMembers ? "border-red-500" : ""
-          }`}
-          disabled={isMaxMembers}
-          onClick={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          Ajouter
-        </button>
-      </form>
-      <section className="w-full bg-yellow-500 flex gap-4 md:justify-around overflow-x-auto">
-        {/* each 15 members a new unordered list  */}
-        {members.map((splitingMember, index) => {
-          if (index % 15 === 0) {
+    <main className="h-[calc(100%-128px)] w-full bg-white flex flex-col justify-around items-center">
+      <button
+        type="submit"
+        className="bg-black text-white font-bold p-2 rounded-md border-2 border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
+        onClick={() => setIsModalOpen(true)}
+      >
+        Ajouter un Membre
+      </button>
+      {isModalOpen && (
+        <AddModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+      )}
+      <section className="h-[calc(100%-64px)] w-full md:flex md:justify-center md:items-center">
+        <ul className="h-full w-full overflow-y-auto px-10 md:px-0 md:overflow-auto md:flex md:flex-wrap md:gap-4">
+          {members.map((member) => {
             return (
-              <ul className="bg-white flex flex-col" key={splitingMember.id}>
-                {members.slice(index, index + 15).map((member) => {
-                  return <li key={member.id}>{member.name}</li>;
-                })}
-              </ul>
+              <li
+                className="h-24 w-full border my-4 border-slate-500 rounded-md flex shadow-neutral-200 md:flex-responsive-card"
+                key={member.id}
+              >
+                <div className="h-full w-1/2 bg-slate-200 rounded-l-md flex flex-col items-center justify-center">
+                  <p className="text-xl font-bold">{member.name}</p>
+                  {member.tags.map((tag) => {
+                    return <p className="text-sm font-semibold">{tag}</p>;
+                  })}
+                </div>
+                <div className="h-full w-1/2 bg-slate-500 rounded-r-md flex items-center justify-evenly">
+                  <button type="button">
+                    <img src={edit} alt="edit" className="h-6 w-6" />
+                  </button>
+                  <button type="button">
+                    <img src={trash} alt="trash" className="h-6 w-6" />
+                  </button>
+                </div>
+              </li>
             );
-          }
-          return null;
-        })}
+          })}
+        </ul>
       </section>
     </main>
   );
@@ -53,12 +56,6 @@ Main.propTypes = {
       name: PropTypes.string.isRequired,
     })
   ).isRequired,
-  isMaxMembers: PropTypes.bool.isRequired,
-  memberRef: oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]).isRequired,
-  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default Main;

@@ -40,7 +40,7 @@ function App() {
   }, [isMemberAdded]);
   return (
     <div className="h-screen w-screen flex place-content-center">
-      <div className="h-full w-full md:w-5/6 bg-red-500 flex flex-col justify-between">
+      <div className="h-full w-full md:w-5/6  flex flex-col justify-between">
         <Header />
         <Main
           members={members}

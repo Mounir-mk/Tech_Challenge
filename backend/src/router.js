@@ -13,6 +13,7 @@ router.delete("/items/:id", itemControllers.destroy);
 const memberControllers = require("./controllers/memberControllers");
 
 router.get("/members", memberControllers.browse);
+router.get("/members/:id", memberControllers.read);
 router.post("/members", memberControllers.add);
 
 module.exports = router;

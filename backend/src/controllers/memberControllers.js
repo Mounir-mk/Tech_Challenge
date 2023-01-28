@@ -2,9 +2,23 @@ const models = require("../models");
 
 const browse = (req, res) => {
   models.member
-    .findAll()
+    .findAllMembersAndTheirTags()
     .then(([rows]) => {
-      res.send(rows);
+      // gather all the tags for each member in a single array of tags and remove all the duplicates
+      const newRows = rows.reduce((acc, row) => {
+        const member = acc.find((m) => m.id === row.id);
+        if (member) {
+          member.tags.push(row.tag_name);
+        } else {
+          acc.push({
+            id: row.id,
+            name: row.name,
+            tags: [row.tag_name],
+          });
+        }
+        return acc;
+      }, []);
+      res.send(newRows);
     })
     .catch((err) => {
       console.error(err);
@@ -19,7 +33,10 @@ const read = (req, res) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        res.send(rows[0]);
+        // gather all the tags for the member in a single array of tags
+        const newRow = rows[0];
+        newRow.tags = rows.map((row) => row.tag_name);
+        res.send(newRow);
       }
     })
     .catch((err) => {
