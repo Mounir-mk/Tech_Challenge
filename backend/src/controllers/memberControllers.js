@@ -62,6 +62,12 @@ const edit = async (req, res) => {
     data: {
       name: req.body.name,
       age: req.body.age,
+      member_tag: {
+        deleteMany: {},
+        create: req.body.tags.map((tag) => ({
+          tag_id: tag.tag_id,
+        })),
+      },
     },
   });
   res.json({ member });
@@ -71,7 +77,7 @@ const destroy = async (req, res) => {
   const { id } = req.params;
   const member = await prisma.member.delete({
     where: {
-      id: Number(id),
+      id: parseInt(id, 10),
     },
   });
   res.json({ member });

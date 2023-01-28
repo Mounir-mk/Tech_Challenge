@@ -10,4 +10,8 @@ router.post("/members", memberControllers.add);
 router.put("/members/:id", memberControllers.edit);
 router.delete("/members/:id", memberControllers.destroy);
 
+const tagControllers = require("./controllers/tagControllers");
+
+router.get("/tags", tagControllers.browse);
+
 module.exports = router;
