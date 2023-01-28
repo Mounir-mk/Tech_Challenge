@@ -8,7 +8,6 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
   const ageRef = useRef();
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [member, setMember] = useState({});
   const [errors, setErrors] = useState({});
   const handleUpdate = async () => {
     const data = {
@@ -47,16 +46,6 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
   };
 
   useEffect(() => {
-    const getMember = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/members/${memberToEdit.id}`
-        );
-        setMember(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     const getTags = async () => {
       try {
         const { data } = await axios.get(
@@ -67,7 +56,6 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
         console.error(err);
       }
     };
-    getMember();
     getTags();
   }, []);
 
@@ -93,7 +81,7 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
             id="firstname"
             className="w-64 h-10 rounded shadow-lg border p-2"
             ref={nameRef}
-            defaultValue={member.name}
+            defaultValue={memberToEdit.name}
           />
           {errors.name && (
             <p className="text-red-600 font-bold text-sm">{errors.name}</p>
@@ -107,15 +95,15 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
             id="age"
             className="w-64 h-10 rounded shadow-lg border p-2"
             ref={ageRef}
-            defaultValue={member.age}
+            defaultValue={memberToEdit.age}
           />
           {errors.age && (
             <p className="text-red-600 font-bold text-sm">{errors.age}</p>
           )}
           <h1 className="text-xl text-slate-900">Tags Actuels</h1>
-          {member.tags && (
+          {memberToEdit.tags && (
             <div className="flex flex-wrap gap-2">
-              {member.tags.map((tag) => (
+              {memberToEdit.tags.map((tag) => (
                 <div
                   key={tag}
                   className="flex items-center justify-center bg-slate-900 text-white rounded-lg w-32 h-10"
@@ -220,12 +208,7 @@ EditModal.propTypes = {
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     age: PropTypes.number.isRequired,
-    tags: PropTypes.arrayOf(
-      PropTypes.shape({
-        tag_id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-      })
-    ).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
   }).isRequired,
 };
 

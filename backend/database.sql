@@ -91,7 +91,8 @@ INSERT INTO tag (name) VALUES
   ('tragique'),
   ('philosophe'),
   ('savant'),
-  ('intelligent');
+  ('intelligent'),
+  ('chanceux');
 
 -- CREATE TABLE member_tag (
 --   id int(11) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
