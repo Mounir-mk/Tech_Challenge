@@ -8,7 +8,37 @@ POST http://localhost:5000/members
 Content-Type: application/json
 
 {
-    "name": "Mounir",
-    "age": 30,
-    "tags": ["python", "javascript"],
+    "name": "Mouns",
+    "age": 24,
+    "tags": [
+        {
+            "tag_id": 4
+        },
+        {
+            "tag_id": 6
+        }
+    ]
 }
+
+###
+PUT http://localhost:5000/members/35
+Content-Type: application/json
+
+{
+    "name": "Mouns",
+    "age": 25,
+    "tags": [
+        {
+            "tag_id": 1
+        },
+        {
+            "tag_id": 2
+        }
+    ]
+}
+
+###
+DELETE http://localhost:5000/members/33
+
+###
+GET http://localhost:5000/tags

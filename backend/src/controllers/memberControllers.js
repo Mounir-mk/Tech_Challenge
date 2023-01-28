@@ -1,130 +1,92 @@
-const models = require("../models");
+const { PrismaClient } = require("@prisma/client");
 
-const browse = (req, res) => {
-  models.member
-    .findAllMembersAndTheirTags()
-    .then(([rows]) => {
-      // gather all the tags for each member in a single array of tags and remove all the duplicates
-      const newRows = rows.reduce((acc, row) => {
-        const member = acc.find((m) => m.id === row.id);
-        if (member) {
-          member.tags.push(row.tag_name);
-        } else {
-          acc.push({
-            id: row.id,
-            name: row.name,
-            tags: [row.tag_name],
-          });
-        }
-        return acc;
-      }, []);
-      res.send(newRows);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const prisma = new PrismaClient();
+
+const browse = async (req, res) => {
+  const members = await prisma.member.findMany({
+    include: {
+      member_tag: {
+        include: {
+          tag: true,
+        },
+      },
+    },
+  });
+  for (const member of members) {
+    member.tags = member.member_tag.map((memberTag) => memberTag.tag.name);
+    delete member.member_tag;
+  }
+  res.json(members);
 };
 
-const read = (req, res) => {
-  models.member
-    .findMemberAndHisTags(req.params.id)
-    .then(([rows]) => {
-      if (rows[0] == null) {
-        res.sendStatus(404);
-      } else {
-        // gather all the tags for the member in a single array of tags
-        const newRow = rows[0];
-        newRow.tags = rows.map((row) => row.tag_name);
-        delete newRow.tag_name;
-        res.send(newRow);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
-};
-
-const edit = (req, res) => {
-  const member = req.body;
-
-  // TODO validations (length, format...)
-
-  member.id = parseInt(req.params.id, 10);
-
-  models.member
-    .update(member)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const read = async (req, res) => {
+  const { id } = req.params;
+  const member = await prisma.member.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      member_tag: {
+        include: {
+          tag: true,
+        },
+      },
+    },
+  });
+  member.tags = member.member_tag.map((memberTag) => memberTag.tag.name);
+  delete member.member_tag;
+  res.json(member);
 };
 
 const add = async (req, res) => {
-  // receiving member informations and its tags in the body of the request
-  //   {
-  //     "name": "Mounir",
-  //     "age": 30,
-  //     "tags": ["python", "javascript"],
-  // }
-  // insert the member and its tags in the database
-  // send back the id of the new member
-  const { name, age, tags } = req.body;
-
-  // TODO validations (length, format...)
-
-  try {
-    const [result] = await models.member.insert({ name, age });
-    const memberId = result.insertId;
-
-    const tagIds = await Promise.all(
-      tags.map(async (tag) => {
-        const [resultTag] = await models.tag.insert({ name: tag });
-        return resultTag.insertId;
-      })
-    );
-
-    await Promise.all(
-      tagIds.map(async (tagId) => {
-        await models.memberTag.insert({ member_id: memberId, tag_id: tagId });
-      })
-    );
-
-    res.send({ id: memberId });
-  } catch (err) {
-    console.error(err);
-    res.sendStatus(500);
-  }
+  const member = await prisma.member.create({
+    data: {
+      name: req.body.name,
+      age: req.body.age,
+      member_tag: {
+        create: req.body.tags.map((tag) => ({
+          tag_id: tag.tag_id,
+        })),
+      },
+    },
+  });
+  res.json({ member });
 };
 
-const destroy = (req, res) => {
-  models.member
-    .delete(req.params.id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const edit = async (req, res) => {
+  const { id } = req.params;
+  const member = await prisma.member.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      name: req.body.name,
+      age: req.body.age,
+      member_tag: {
+        deleteMany: {},
+        create: req.body.tags.map((tag) => ({
+          tag_id: tag.tag_id,
+        })),
+      },
+    },
+  });
+  res.json({ member });
+};
+
+const destroy = async (req, res) => {
+  const { id } = req.params;
+  const member = await prisma.member.delete({
+    where: {
+      id: parseInt(id, 10),
+    },
+  });
+  res.json({ member });
 };
 
 module.exports = {
   browse,
   read,
-  edit,
   add,
+  edit,
   destroy,
 };

@@ -1,22 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
 import AddModal from "./MainComponents/AddModal";
+import EditModal from "./MainComponents/EditModal";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
 
-function Main({ members }) {
+function Main() {
+  const [members, setMembers] = useState([]);
+  const [isMemberAdded, setIsMemberAdded] = useState(false);
+  const [isMemberDeleted, setIsMemberDeleted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [memberToEdit, setMemberToEdit] = useState({});
+
   const handleDeleteMember = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/members/${id}`
-      );
-      console.warn(response);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/members/${id}}`);
+      setIsMemberDeleted(!isMemberDeleted);
     } catch (error) {
       console.error(error);
     }
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const getMembers = async () => {
+      try {
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/members`
+        );
+        setMembers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getMembers();
+  }, [isMemberAdded, isMemberDeleted]);
+
   return (
     <main className="h-[calc(100%-128px)] w-full bg-white flex flex-col justify-around items-center">
       <button
@@ -27,7 +46,19 @@ function Main({ members }) {
         Ajouter un Membre
       </button>
       {isModalOpen && (
-        <AddModal setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+        <AddModal
+          setIsModalOpen={setIsModalOpen}
+          isModalOpen={isModalOpen}
+          setIsMemberAdded={setIsMemberAdded}
+        />
+      )}
+      {isEditModalOpen && (
+        <EditModal
+          setIsEditModalOpen={setIsEditModalOpen}
+          isEditModalOpen={isEditModalOpen}
+          setIsMemberAdded={setIsMemberAdded}
+          memberToEdit={memberToEdit}
+        />
       )}
       <section className="h-[calc(100%-64px)] w-full md:flex md:justify-center md:items-center">
         <ul className="h-full w-full overflow-y-auto px-10 md:px-0 md:overflow-auto md:flex md:flex-wrap md:gap-4">
@@ -44,7 +75,13 @@ function Main({ members }) {
                   })}
                 </div>
                 <div className="h-full w-1/2 bg-slate-500 rounded-r-md flex items-center justify-evenly">
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMemberToEdit(member);
+                      setIsEditModalOpen(true);
+                    }}
+                  >
                     <img src={edit} alt="edit" className="h-6 w-6" />
                   </button>
                   <button
@@ -62,14 +99,5 @@ function Main({ members }) {
     </main>
   );
 }
-
-Main.propTypes = {
-  members: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
 
 export default Main;
