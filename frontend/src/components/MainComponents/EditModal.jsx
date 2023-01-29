@@ -3,9 +3,22 @@ import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 // eslint-disable-next-line import/no-unresolved
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ToastContainer, toast } from "react-toastify";
 import { getTags, handleUpdate } from "../../services/api";
+import "react-toastify/dist/ReactToastify.css";
 
 function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
+  const notify = () =>
+    toast.success("Membre modifié avec succès !", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   const [parent] = useAutoAnimate();
   const nameRef = useRef();
   const ageRef = useRef();
@@ -39,8 +52,21 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
           onSubmit={(e) => {
             e.preventDefault();
             handleUpdate(args);
+            notify();
           }}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="dark"
+          />
           <label htmlFor="name" className="text-xl text-slate-900">
             Nom
           </label>

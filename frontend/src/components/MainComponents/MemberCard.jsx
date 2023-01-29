@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { ToastContainer, toast } from "react-toastify";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
 import { handleDeleteMember } from "../../services/api";
+import "react-toastify/dist/ReactToastify.css";
 
 function MemberCard({
   member,
@@ -10,6 +12,17 @@ function MemberCard({
   setIsEditModalOpen,
   setIsMemberDeleted,
 }) {
+  const notify = () =>
+    toast.error("Un membre a été supprimé ! 🚮", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   return (
     <li
       className="h-24 w-full border my-4 border-slate-500 rounded-md flex shadow-neutral-200 md:flex-responsive-card"
@@ -33,10 +46,25 @@ function MemberCard({
         </button>
         <button
           type="button"
-          onClick={() => handleDeleteMember(member.id, setIsMemberDeleted)}
+          onClick={() => {
+            handleDeleteMember(member.id, setIsMemberDeleted);
+            notify();
+          }}
         >
           <img src={trash} alt="trash" className="h-6 w-6" />
         </button>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover={false}
+          theme="dark"
+        />
       </div>
     </li>
   );
