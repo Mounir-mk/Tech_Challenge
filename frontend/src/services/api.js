@@ -53,6 +53,8 @@ const handle = async (args) => {
     selectedTags,
     setErrors,
     setIsMemberAdded,
+    setIsModalOpen,
+    setIsEditModalOpen,
   } = args;
 
   const data = {
@@ -74,6 +76,11 @@ const handle = async (args) => {
         },
       });
       setIsMemberAdded((prev) => !prev);
+      if (memberToEdit) {
+        setIsEditModalOpen(false);
+      } else {
+        setIsModalOpen(false);
+      }
     } catch (err) {
       console.error(err);
     }
