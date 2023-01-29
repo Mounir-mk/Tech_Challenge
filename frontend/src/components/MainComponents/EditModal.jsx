@@ -31,7 +31,6 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
     nameRef,
     ageRef,
     selectedTags,
-    setIsEditModalOpen,
     setErrors,
     setIsMemberAdded,
   };
@@ -52,6 +51,7 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
           onSubmit={(e) => {
             e.preventDefault();
             handleUpdate(args);
+            setIsEditModalOpen((old) => !old);
             notify();
           }}
         >

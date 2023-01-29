@@ -29,7 +29,6 @@ function AddModal({ setIsModalOpen, setIsMemberAdded }) {
   const args = {
     nameRef,
     ageRef,
-    setIsModalOpen,
     setIsMemberAdded,
     setErrors,
     selectedTags,
@@ -51,6 +50,7 @@ function AddModal({ setIsModalOpen, setIsMemberAdded }) {
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit(args);
+            setIsModalOpen((old) => !old);
             notify();
           }}
         >
