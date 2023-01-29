@@ -1,77 +1,72 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
+// eslint-disable-next-line import/no-unresolved
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ToastContainer, toast } from "react-toastify";
+import { getTags, handleUpdate } from "../../services/api";
+import "react-toastify/dist/ReactToastify.css";
 
 function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
+  const notify = () =>
+    toast.success("Membre modifié avec succès !", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const [parent] = useAutoAnimate();
   const nameRef = useRef();
   const ageRef = useRef();
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [errors, setErrors] = useState({});
-  const handleUpdate = async () => {
-    const data = {
-      name: nameRef.current.value,
-      age: parseInt(ageRef.current.value, 10),
-      tags: selectedTags.map((tag) => ({ tag_id: parseInt(tag.tag_id, 10) })),
-    };
-    const newErrors = {};
-    if (!data.name) {
-      newErrors.name = "Le nom est obligatoire";
-    }
-    if (!data.age) {
-      newErrors.age = "L'âge est obligatoire";
-    }
-    if (data.tags.length === 0) {
-      newErrors.tags = "Au moins un tag est obligatoire";
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        await axios.put(
-          `${import.meta.env.VITE_BACKEND_URL}/members/${memberToEdit.id}`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        setIsMemberAdded((prev) => !prev);
-        setIsEditModalOpen(false);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+
+  const args = {
+    memberToEdit,
+    nameRef,
+    ageRef,
+    selectedTags,
+    setIsEditModalOpen,
+    setErrors,
+    setIsMemberAdded,
   };
 
   useEffect(() => {
-    const getTags = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/tags`
-        );
-        setTags(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getTags();
+    getTags(setTags);
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full bg-slate-600 bg-opacity-60 flex items-center justify-center">
+    <div className="absolute top-0 left-0 w-full h-full bg-slate-600 bg-opacity-60 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow flex flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-slate-900 pb-10">
           Modifier un membre
         </h1>
         <form
+          ref={parent}
           className="flex flex-col items-center justify-center w-full p-6 gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            handleUpdate();
+            handleUpdate(args);
+            notify();
           }}
         >
+          <ToastContainer
+            position="top-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover={false}
+            theme="dark"
+          />
           <label htmlFor="name" className="text-xl text-slate-900">
             Nom
           </label>
