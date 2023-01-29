@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import AddModal from "./MainComponents/AddModal";
 import EditModal from "./MainComponents/EditModal";
 import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
+import { getMembers, handleDeleteMember } from "../services/api";
 
 function Main() {
   const [members, setMembers] = useState([]);
@@ -13,27 +13,8 @@ function Main() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [memberToEdit, setMemberToEdit] = useState({});
 
-  const handleDeleteMember = async (id) => {
-    try {
-      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/members/${id}}`);
-      setIsMemberDeleted(!isMemberDeleted);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    const getMembers = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/members`
-        );
-        setMembers(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getMembers();
+    getMembers(setMembers);
   }, [isMemberAdded, isMemberDeleted]);
 
   return (
@@ -86,7 +67,9 @@ function Main() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleDeleteMember(member.id)}
+                    onClick={() =>
+                      handleDeleteMember(member.id, setIsMemberDeleted)
+                    }
                   >
                     <img src={trash} alt="trash" className="h-6 w-6" />
                   </button>

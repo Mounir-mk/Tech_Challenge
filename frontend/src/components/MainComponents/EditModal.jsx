@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
+import { getTags, handleUpdate } from "../../services/api";
 
 function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
   const nameRef = useRef();
@@ -9,54 +9,19 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [errors, setErrors] = useState({});
-  const handleUpdate = async () => {
-    const data = {
-      name: nameRef.current.value,
-      age: parseInt(ageRef.current.value, 10),
-      tags: selectedTags.map((tag) => ({ tag_id: parseInt(tag.tag_id, 10) })),
-    };
-    const newErrors = {};
-    if (!data.name) {
-      newErrors.name = "Le nom est obligatoire";
-    }
-    if (!data.age) {
-      newErrors.age = "L'âge est obligatoire";
-    }
-    if (data.tags.length === 0) {
-      newErrors.tags = "Au moins un tag est obligatoire";
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        await axios.put(
-          `${import.meta.env.VITE_BACKEND_URL}/members/${memberToEdit.id}`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        setIsMemberAdded((prev) => !prev);
-        setIsEditModalOpen(false);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+
+  const args = {
+    memberToEdit,
+    nameRef,
+    ageRef,
+    selectedTags,
+    setIsEditModalOpen,
+    setErrors,
+    setIsMemberAdded,
   };
 
   useEffect(() => {
-    const getTags = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/tags`
-        );
-        setTags(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getTags();
+    getTags(setTags);
   }, []);
 
   return (
@@ -69,7 +34,7 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
           className="flex flex-col items-center justify-center w-full p-6 gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            handleUpdate();
+            handleUpdate(args);
           }}
         >
           <label htmlFor="name" className="text-xl text-slate-900">

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
+import { handleSubmit, getTags } from "../../services/api";
 
 function AddModal({ setIsModalOpen, setIsMemberAdded }) {
   const nameRef = useRef();
@@ -9,50 +9,18 @@ function AddModal({ setIsModalOpen, setIsMemberAdded }) {
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [errors, setErrors] = useState({});
-  const handleSubmit = async () => {
-    const data = {
-      name: nameRef.current.value,
-      age: parseInt(ageRef.current.value, 10),
-      tags: selectedTags.map((tag) => ({ tag_id: parseInt(tag.tag_id, 10) })),
-    };
-    const newErrors = {};
-    if (!data.name) {
-      newErrors.name = "Le nom est obligatoire";
-    }
-    if (!data.age) {
-      newErrors.age = "L'âge est obligatoire";
-    }
-    if (data.tags.length === 0) {
-      newErrors.tags = "Au moins un tag est obligatoire";
-    }
-    setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      try {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/members`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setIsMemberAdded((prev) => !prev);
-        setIsModalOpen(false);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+
+  const args = {
+    nameRef,
+    ageRef,
+    setIsModalOpen,
+    setIsMemberAdded,
+    setErrors,
+    selectedTags,
   };
 
   useEffect(() => {
-    const getTags = async () => {
-      try {
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/tags`
-        );
-        setTags(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getTags();
+    getTags(setTags);
   }, []);
 
   return (
@@ -65,7 +33,7 @@ function AddModal({ setIsModalOpen, setIsMemberAdded }) {
           className="flex flex-col items-center justify-center w-full p-6 gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            handleSubmit(args);
           }}
         >
           <label htmlFor="name" className="text-xl text-slate-900">
