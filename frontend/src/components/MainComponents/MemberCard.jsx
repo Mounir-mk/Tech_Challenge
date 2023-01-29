@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import edit from "../../assets/edit.svg";
 import trash from "../../assets/trash.svg";
 import { handleDeleteMember } from "../../services/api";
@@ -53,18 +53,6 @@ function MemberCard({
         >
           <img src={trash} alt="trash" className="h-6 w-6" />
         </button>
-        <ToastContainer
-          position="top-right"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover={false}
-          theme="dark"
-        />
       </div>
     </li>
   );
