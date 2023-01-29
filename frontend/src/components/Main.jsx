@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+// eslint-disable-next-line import/no-unresolved
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import AddModal from "./MainComponents/AddModal";
 import EditModal from "./MainComponents/EditModal";
 import MemberCard from "./MainComponents/MemberCard";
@@ -11,13 +13,17 @@ function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [memberToEdit, setMemberToEdit] = useState({});
+  const [parent] = useAutoAnimate();
 
   useEffect(() => {
     getMembers(setMembers);
   }, [isMemberAdded, isMemberDeleted]);
 
   return (
-    <main className="h-[calc(100%-128px)] w-full bg-white flex flex-col justify-around items-center">
+    <main
+      ref={parent}
+      className="h-[calc(100%-128px)] w-full bg-white flex flex-col justify-around items-center"
+    >
       <button
         type="submit"
         className="bg-black text-white font-bold p-2 rounded-md border-2 border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-transparent"
@@ -41,7 +47,10 @@ function Main() {
         />
       )}
       <section className="h-[calc(100%-64px)] w-full md:flex md:justify-center md:items-center">
-        <ul className="h-full w-full overflow-y-auto px-10 md:px-0 md:overflow-auto md:flex md:flex-wrap md:gap-4">
+        <ul
+          ref={parent}
+          className="h-full w-full overflow-y-auto px-10 md:px-0 md:overflow-auto md:flex md:flex-wrap md:gap-4"
+        >
           {members.map((member) => {
             return (
               <MemberCard

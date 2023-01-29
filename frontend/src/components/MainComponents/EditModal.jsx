@@ -1,9 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
+// eslint-disable-next-line import/no-unresolved
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { getTags, handleUpdate } from "../../services/api";
 
 function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
+  const [parent] = useAutoAnimate();
   const nameRef = useRef();
   const ageRef = useRef();
   const [tags, setTags] = useState([]);
@@ -25,12 +28,13 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
   }, []);
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full bg-slate-600 bg-opacity-60 flex items-center justify-center">
+    <div className="absolute top-0 left-0 w-full h-full bg-slate-600 bg-opacity-60 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow flex flex-col items-center justify-center p-4">
         <h1 className="text-3xl font-bold text-slate-900 pb-10">
           Modifier un membre
         </h1>
         <form
+          ref={parent}
           className="flex flex-col items-center justify-center w-full p-6 gap-2"
           onSubmit={(e) => {
             e.preventDefault();
