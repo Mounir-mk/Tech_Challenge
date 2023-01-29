@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import AddModal from "./MainComponents/AddModal";
 import EditModal from "./MainComponents/EditModal";
-import edit from "../assets/edit.svg";
-import trash from "../assets/trash.svg";
-import { getMembers, handleDeleteMember } from "../services/api";
+import MemberCard from "./MainComponents/MemberCard";
+import { getMembers } from "../services/api";
 
 function Main() {
   const [members, setMembers] = useState([]);
@@ -45,36 +44,12 @@ function Main() {
         <ul className="h-full w-full overflow-y-auto px-10 md:px-0 md:overflow-auto md:flex md:flex-wrap md:gap-4">
           {members.map((member) => {
             return (
-              <li
-                className="h-24 w-full border my-4 border-slate-500 rounded-md flex shadow-neutral-200 md:flex-responsive-card"
-                key={member.id}
-              >
-                <div className="h-full w-1/2 bg-slate-200 rounded-l-md flex flex-col items-center justify-center">
-                  <p className="text-xl font-bold">{member.name}</p>
-                  {member.tags.map((tag) => {
-                    return <p className="text-sm font-semibold">{tag}</p>;
-                  })}
-                </div>
-                <div className="h-full w-1/2 bg-slate-500 rounded-r-md flex items-center justify-evenly">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMemberToEdit(member);
-                      setIsEditModalOpen(true);
-                    }}
-                  >
-                    <img src={edit} alt="edit" className="h-6 w-6" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleDeleteMember(member.id, setIsMemberDeleted)
-                    }
-                  >
-                    <img src={trash} alt="trash" className="h-6 w-6" />
-                  </button>
-                </div>
-              </li>
+              <MemberCard
+                member={member}
+                setMemberToEdit={setMemberToEdit}
+                setIsEditModalOpen={setIsEditModalOpen}
+                setIsMemberDeleted={setIsMemberDeleted}
+              />
             );
           })}
         </ul>
