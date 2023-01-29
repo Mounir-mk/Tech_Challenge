@@ -20,45 +20,6 @@ const getMembers = async (setMembers) => {
   }
 };
 
-const handleSubmit = async ({
-  nameRef,
-  ageRef,
-  selectedTags,
-  setIsModalOpen,
-  setErrors,
-  setIsMemberAdded,
-}) => {
-  const data = {
-    name: nameRef.current.value,
-    age: parseInt(ageRef.current.value, 10),
-    tags: selectedTags.map((tag) => ({ tag_id: parseInt(tag.tag_id, 10) })),
-  };
-  const newErrors = {};
-  if (!data.name) {
-    newErrors.name = "Le nom est obligatoire";
-  }
-  if (!data.age) {
-    newErrors.age = "L'âge est obligatoire";
-  }
-  if (data.tags.length === 0) {
-    newErrors.tags = "Au moins un tag est obligatoire";
-  }
-  setErrors(newErrors);
-  if (Object.keys(newErrors).length === 0) {
-    try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/members`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      setIsMemberAdded((prev) => !prev);
-      setIsModalOpen(false);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-};
-
 const getTags = async (setTags) => {
   try {
     const { data } = await axios.get(
@@ -70,20 +31,7 @@ const getTags = async (setTags) => {
   }
 };
 
-const handleUpdate = async ({
-  memberToEdit,
-  nameRef,
-  ageRef,
-  selectedTags,
-  setIsEditModalOpen,
-  setErrors,
-  setIsMemberAdded,
-}) => {
-  const data = {
-    name: nameRef.current.value,
-    age: parseInt(ageRef.current.value, 10),
-    tags: selectedTags.map((tag) => ({ tag_id: parseInt(tag.tag_id, 10) })),
-  };
+const validate = (data) => {
   const newErrors = {};
   if (!data.name) {
     newErrors.name = "Le nom est obligatoire";
@@ -94,24 +42,53 @@ const handleUpdate = async ({
   if (data.tags.length === 0) {
     newErrors.tags = "Au moins un tag est obligatoire";
   }
+  return newErrors;
+};
+
+const handle = async (args) => {
+  const {
+    memberToEdit,
+    nameRef,
+    ageRef,
+    selectedTags,
+    setIsEditModalOpen,
+    setIsModalOpen,
+    setErrors,
+    setIsMemberAdded,
+  } = args;
+
+  const data = {
+    name: nameRef.current.value,
+    age: parseInt(ageRef.current.value, 10),
+    tags: selectedTags.map((tag) => ({ tag_id: parseInt(tag.tag_id, 10) })),
+  };
+  const newErrors = validate(data);
   setErrors(newErrors);
   if (Object.keys(newErrors).length === 0) {
     try {
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/members/${memberToEdit.id}`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const endpoint = memberToEdit
+        ? `${import.meta.env.VITE_BACKEND_URL}/members/${memberToEdit.id}`
+        : `${import.meta.env.VITE_BACKEND_URL}/members`;
+      const method = memberToEdit ? "put" : "post";
+      await axios[method](endpoint, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       setIsMemberAdded((prev) => !prev);
-      setIsEditModalOpen(false);
+      if (memberToEdit) {
+        setIsEditModalOpen(false);
+      } else {
+        setIsModalOpen(false);
+      }
     } catch (err) {
       console.error(err);
     }
   }
 };
+
+const handleUpdate = (args) =>
+  handle({ ...args, memberToEdit: args.memberToEdit });
+const handleSubmit = (args) => handle({ ...args });
 
 export { handleDeleteMember, getMembers, handleSubmit, getTags, handleUpdate };
