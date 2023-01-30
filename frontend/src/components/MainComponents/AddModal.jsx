@@ -33,6 +33,7 @@ function AddModal({ setIsModalOpen, setIsMemberAdded }) {
     setIsMemberAdded,
     setErrors,
     selectedTags,
+    notify,
   };
 
   useEffect(() => {
@@ -51,7 +52,6 @@ function AddModal({ setIsModalOpen, setIsMemberAdded }) {
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit(args);
-            notify();
           }}
         >
           <label htmlFor="name" className="text-xl text-slate-900">

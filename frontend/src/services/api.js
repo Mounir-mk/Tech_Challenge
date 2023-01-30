@@ -55,6 +55,7 @@ const handle = async (args) => {
     setIsMemberAdded,
     setIsModalOpen,
     setIsEditModalOpen,
+    notify,
   } = args;
 
   const data = {
@@ -78,8 +79,10 @@ const handle = async (args) => {
       setIsMemberAdded((prev) => !prev);
       if (memberToEdit) {
         setIsEditModalOpen(false);
+        notify();
       } else {
         setIsModalOpen(false);
+        notify();
       }
     } catch (err) {
       console.error(err);

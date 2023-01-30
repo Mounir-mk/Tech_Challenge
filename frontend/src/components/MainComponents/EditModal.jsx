@@ -34,6 +34,7 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
     setIsEditModalOpen,
     setErrors,
     setIsMemberAdded,
+    notify,
   };
 
   useEffect(() => {
@@ -52,7 +53,6 @@ function EditModal({ setIsEditModalOpen, setIsMemberAdded, memberToEdit }) {
           onSubmit={(e) => {
             e.preventDefault();
             handleUpdate(args);
-            notify();
           }}
         >
           <label htmlFor="name" className="text-xl text-slate-900">
